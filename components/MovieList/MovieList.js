@@ -1,5 +1,11 @@
 import { useState, useEffect } from "react";
-import { View, Text, FlatList, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  useWindowDimensions,
+} from "react-native";
 import axios from "axios";
 import { MovieCard } from "../../components";
 import { config } from "../../config.js";
@@ -47,6 +53,11 @@ export default function MovieList({ searchTerm }) {
     <MovieCard movie={item} handleClick={handleClick} />
   );
 
+  const { width } = useWindowDimensions();
+
+  // Define o número de colunas com base na largura da tela
+  const numColumns = width > 768 ? 3 : width > 480 ? 2 : 1;
+
   return (
     <View style={styles.moviesContainer}>
       {moviesList.length <= 0 ? (
@@ -56,8 +67,8 @@ export default function MovieList({ searchTerm }) {
           data={filteredMovies}
           renderItem={renderMovie}
           keyExtractor={(item) => item.id.toString()}
-          numColumns={2} // Define o layout como uma grid com 2 colunas
-          columnWrapperStyle={styles.columnWrapper}
+          numColumns={numColumns} // Define o layout como uma grid com 2 colunas
+          columnWrapperStyle={numColumns > 1 ? styles.columnWrapper : null}
           contentContainerStyle={styles.listContent}
         />
       ) : (
@@ -70,10 +81,9 @@ export default function MovieList({ searchTerm }) {
 const styles = StyleSheet.create({
   moviesContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#fff",
-    padding: 20,
+    paddingTop: 10,
+    flexWrap: "wrap",
+    margin: "auto",
   },
   listContent: {
     paddingHorizontal: 10,

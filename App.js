@@ -1,88 +1,58 @@
 import React from "react";
-import { StyleSheet, useColorScheme } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
-import { Home, Favorites, MovieDetails } from "./pages";
+
 import AppProvider from "./Context";
-import { COLORS } from "./globals";
+
+// components
 import { BottomNav } from "./components";
+
+// pages
+import MovieDetails from "./pages/MovieDetails/MovieDetails";
+import Home from "./pages/Home/Home";
 
 // Create Bottom Tabs
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
-export default function App() {
-  const scheme = useColorScheme(); // Detecta light ou dark
+const linking = {
+  prefixes: ["http://localhost:8081"],
+  config: {
+    screens: {
+      Home: "/",
+      MovieDetails: "movie/:id", // Configurando Deep Linking para MovieDetails
+      Favorites: "favorites",
+    },
+  },
+};
 
+export default function App() {
   return (
     <AppProvider>
-      <NavigationContainer>
-        <Stack.Navigator>
-          {/* Abas principais como uma tela do Stack */}
+      <NavigationContainer linking={linking}>
+        <Stack.Navigator
+          screenOptions={{
+            headerStyle: { backgroundColor: "#242424" },
+            headerTintColor: "#ffffff",
+            headerTitleStyle: { fontWeight: "bold" },
+          }}
+        >
+          {/* Tela Inicial */}
           <Stack.Screen
             name="Home"
             component={Home}
-            options={{ headerShown: false }}
+            options={{ title: "Filmes" }}
           />
 
-          {/* Tela de detalhes */}
+          {/* Tela de Detalhes */}
           <Stack.Screen
             name="MovieDetails"
             component={MovieDetails}
-            options={{
-              title: "Detalhes do Filme",
-              headerStyle: {
-                backgroundColor:
-                  scheme === "dark"
-                    ? COLORS.darkBackground
-                    : COLORS.yellowBackground,
-              },
-              headerTintColor:
-                scheme === "dark" ? COLORS.lightFontDefault : COLORS.darkFont,
-            }}
+            options={{ title: "Detalhes do Filme" }}
           />
         </Stack.Navigator>
-        <BottomNav />
       </NavigationContainer>
     </AppProvider>
   );
 }
-
-// Configuração das abas principais
-function MainTabs() {
-  const scheme = useColorScheme(); // Detecta light ou dark
-
-  return (
-    <Tab.Navigator
-      screenOptions={{
-        headerShown: false,
-        tabBarStyle: {
-          backgroundColor:
-            scheme === "dark" ? COLORS.darkBackground : COLORS.yellowBackground,
-          paddingBottom: 5,
-        },
-        tabBarActiveTintColor:
-          scheme === "dark" ? COLORS.lightFontDefault : COLORS.darkFont,
-        tabBarInactiveTintColor: COLORS.lightBlackFont,
-      }}
-    >
-      <Tab.Screen name="Home" component={Home} />
-      <Tab.Screen name="Favorites" component={Favorites} />
-    </Tab.Navigator>
-  );
-}
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: COLORS.lightBlackFont,
-    padding: 10,
-    width: "80%",
-  },
-});

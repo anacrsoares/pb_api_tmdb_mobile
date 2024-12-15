@@ -1,12 +1,5 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  Image,
-  StyleSheet,
-  TouchableOpacity,
-  Linking,
-} from "react-native";
+import { View, Text, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { Ionicons } from "react-native-vector-icons";
 import StarRating from "../StarRating/StarRating";
 import { config } from "../../config";
@@ -60,12 +53,7 @@ export default function MovieCard({ movie, handleClick }) {
         {/* Botão "Ver mais" */}
         <TouchableOpacity
           style={styles.seeMoreButton}
-          onPress={
-            (onPress = () =>
-              navigation.navigate("MovieDetails", {
-                movieId: movie.id,
-              }))
-          }
+          onPress={() => navigation.navigate("MovieDetails", { id: movie.id })}
         >
           <Text style={styles.seeMoreButtonText}>Ver mais</Text>
         </TouchableOpacity>
@@ -76,22 +64,20 @@ export default function MovieCard({ movie, handleClick }) {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    maxWidth: 330,
+    maxWidth: 300,
+    width: 300,
     borderRadius: 8,
     overflow: "hidden",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 5,
+    boxShadow: "0px 2px 3.84px rgba(0, 0, 0, 0.25)", // equivalente ao estilo de sombra
     elevation: 5,
     backgroundColor: "#000",
-    margin: 10,
     borderWidth: 1,
     borderColor: "blue",
+    marginBottom: 20,
   },
   moviePosterImg: {
     width: "100%",
-    height: 200,
+    height: 400,
     resizeMode: "cover",
     borderBottomWidth: 1,
     borderBottomColor: "violet",
@@ -102,6 +88,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   movieTitle: {
+    padding: 10,
     fontSize: 18,
     fontWeight: "bold",
     color: "white",
@@ -110,6 +97,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "red",
   },
   movieDescription: {
+    padding: 5,
     fontSize: 14,
     lineHeight: 20,
     color: "#ddd",
@@ -117,13 +105,16 @@ const styles = StyleSheet.create({
   },
   seeMoreButton: {
     backgroundColor: "red",
-    padding: 10,
+    padding: 5,
     borderRadius: 5,
     alignItems: "center",
+    justifyContent: "center",
+    marginHorizontal: "auto",
+    width: 200,
   },
   seeMoreButtonText: {
     color: "white",
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: "bold",
   },
 });

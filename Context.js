@@ -41,7 +41,8 @@ const AppProvider = ({ children }) => {
 
       // Salva os favoritos no AsyncStorage
       AsyncStorage.setItem("favorites", JSON.stringify(newFavorites)).catch(
-        (error) => console.error("Erro ao salvar favoritos no AsyncStorage:", error)
+        (error) =>
+          console.error("Erro ao salvar favoritos no AsyncStorage:", error)
       );
 
       return newFavorites;

@@ -1,4 +1,4 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, ScrollView } from "react-native";
 import { Navbar, MovieList } from "../../components";
 import { useState } from "react";
 
@@ -10,25 +10,23 @@ export default function Home() {
   };
 
   return (
-    <View style={styles.homepage}>
+    <View style={styles.homeWrapper}>
       <Navbar onSearch={handleSearch} />
-      <View style={styles.homeWrapper}>
+      <ScrollView style={styles.scrollViewContent}>
         <MovieList searchTerm={searchTerm} />
-      </View>
+      </ScrollView>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  homepage: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#fff", // Adicione uma cor de fundo, se necessário
-  },
+  homepage: {},
   homeWrapper: {
     flex: 1,
     width: "100%", // Ocupar a largura total
-    paddingHorizontal: 10, // Espaço lateral (opcional)
+    backgroundColor: "#242424",
+  },
+  scrollViewContent: {
+    flexGrow: 1,
   },
 });
