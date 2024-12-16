@@ -12,9 +12,9 @@ export default function Home() {
   return (
     <View style={styles.homeWrapper}>
       <Navbar onSearch={handleSearch} />
-      <ScrollView style={styles.scrollViewContent}>
+      <View style={styles.scrollViewContent}>
         <MovieList searchTerm={searchTerm} />
-      </ScrollView>
+      </View>
     </View>
   );
 }

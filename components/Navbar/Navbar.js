@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  StyleSheet,
+} from "react-native";
 import { Ionicons } from "react-native-vector-icons"; // Usando ícones do Ionicons
 import { useNavigation } from "@react-navigation/native"; // Usando navegação do React Navigation
 
@@ -28,7 +34,10 @@ export default function Navbar({ onSearch }) {
             placeholder="Procure seu filme"
             placeholderTextColor="#888"
           />
-          <TouchableOpacity style={styles.searchButton} onPress={() => handleSearch(searchTerm)}>
+          <TouchableOpacity
+            style={styles.searchButton}
+            onPress={() => handleSearch(searchTerm)}
+          >
             <Ionicons name="search" size={24} color="white" />
           </TouchableOpacity>
         </View>
@@ -45,6 +54,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#333", // Cor de fundo escura
     paddingHorizontal: 20,
     justifyContent: "space-between",
+    paddingTop: 25,
   },
   logoContainer: {
     flexDirection: "row",

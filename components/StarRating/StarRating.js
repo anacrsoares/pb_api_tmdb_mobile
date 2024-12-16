@@ -26,5 +26,6 @@ const styles = StyleSheet.create({
   starContainer: {
     flexDirection: "row",
     justifyContent: "flex-start",
+    paddingHorizontal: 10,
   },
 });

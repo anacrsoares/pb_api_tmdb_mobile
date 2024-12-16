@@ -11,6 +11,7 @@ import { BottomNav } from "./components";
 // pages
 import MovieDetails from "./pages/MovieDetails/MovieDetails";
 import Home from "./pages/Home/Home";
+import Favorites from "./pages/Favorites/Favorites";
 
 // Create Bottom Tabs
 const Tab = createBottomTabNavigator();
@@ -27,31 +28,45 @@ const linking = {
   },
 };
 
+function MainStack() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: "#242424" },
+        headerTintColor: "#ffffff",
+        headerTitleStyle: { fontWeight: "bold" },
+      }}
+    >
+      {/* Tela Inicial */}
+      <Stack.Screen
+        name="Home"
+        component={Home}
+        options={{ headerShown: false }}
+      />
+      {/* Tela de Detalhes */}
+      <Stack.Screen
+        name="MovieDetails"
+        component={MovieDetails}
+        options={{ title: "Detalhes do Filme" }}
+      />
+    </Stack.Navigator>
+  );
+}
+
 export default function App() {
   return (
     <AppProvider>
       <NavigationContainer linking={linking}>
-        <Stack.Navigator
+        <Tab.Navigator
           screenOptions={{
-            headerStyle: { backgroundColor: "#242424" },
-            headerTintColor: "#ffffff",
-            headerTitleStyle: { fontWeight: "bold" },
+            headerShown: false, // Oculta o cabeçalho do Tab Navigator
           }}
+          tabBar={(props) => <BottomNav {...props} />} // Customiza a TabBar com BottomNav
         >
-          {/* Tela Inicial */}
-          <Stack.Screen
-            name="Home"
-            component={Home}
-            options={{ title: "Filmes" }}
-          />
-
-          {/* Tela de Detalhes */}
-          <Stack.Screen
-            name="MovieDetails"
-            component={MovieDetails}
-            options={{ title: "Detalhes do Filme" }}
-          />
-        </Stack.Navigator>
+          {/* Telas do Bottom Navigator */}
+          <Tab.Screen name="Home" component={MainStack} />
+          <Tab.Screen name="Favorites" component={Favorites} />
+        </Tab.Navigator>
       </NavigationContainer>
     </AppProvider>
   );

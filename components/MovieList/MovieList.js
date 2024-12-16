@@ -65,7 +65,7 @@ export default function MovieList({ searchTerm }) {
       ) : filteredMovies.length > 0 ? (
         <FlatList
           data={filteredMovies}
-          renderItem={renderMovie}
+          renderItem={({ item }) => <MovieCard movie={item} />}
           keyExtractor={(item) => item.id.toString()}
           numColumns={numColumns} // Define o layout como uma grid com 2 colunas
           columnWrapperStyle={numColumns > 1 ? styles.columnWrapper : null}

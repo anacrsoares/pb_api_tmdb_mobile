@@ -1,33 +1,35 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useContext } from "react";
+import { useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AppContext = createContext(null);
 
 const AppProvider = ({ children }) => {
-  // Função para carregar favoritos do AsyncStorage
+  // shared functions
   const loadFavoritesFromStorage = async () => {
-    try {
-      const storedFavorites = await AsyncStorage.getItem("favorites");
-      return storedFavorites ? JSON.parse(storedFavorites) : {};
-    } catch (error) {
-      console.error("Erro ao carregar favoritos do AsyncStorage:", error);
-      return {};
-    }
+    const storedFavorites = await AsyncStorage.getItem("favorites");
+    return storedFavorites ? JSON.parse(storedFavorites) : {};
   };
 
-  const [listFavorites, setListFavorites] = useState({});
+  const [listFavorites, setListFavorites] = useState(loadFavoritesFromStorage);
 
-  // Carregar favoritos do AsyncStorage ao inicializar
+  // Carregar favoritos do AsyncStorage ao iniciar o app
   useEffect(() => {
-    const fetchFavorites = async () => {
-      const favorites = await loadFavoritesFromStorage();
-      setListFavorites(favorites);
+    const loadFavorites = async () => {
+      try {
+        const storedFavorites = await AsyncStorage.getItem("favorites");
+        if (storedFavorites) {
+          setListFavorites(JSON.parse(storedFavorites));
+        }
+      } catch (error) {
+        console.error("Erro ao carregar favoritos:", error);
+      }
     };
-    fetchFavorites();
+    loadFavorites();
   }, []);
 
   // Função para adicionar ou remover filmes dos favoritos
-  const handleFavoriteList = async (movie) => {
+  const handleFavoriteList = (movie) => {
     setListFavorites((prevFavorites) => {
       const newFavorites = { ...prevFavorites };
 
@@ -35,17 +37,16 @@ const AppProvider = ({ children }) => {
         // Remove o filme da lista de favoritos
         delete newFavorites[movie.id];
       } else {
-        // Adiciona o filme à lista de favoritos
-        newFavorites[movie.id] = movie;
+        newFavorites[movie.id] = movie; // Adiciona se não está nos favoritos
       }
 
-      // Salva os favoritos no AsyncStorage
-      AsyncStorage.setItem("favorites", JSON.stringify(newFavorites)).catch(
-        (error) =>
-          console.error("Erro ao salvar favoritos no AsyncStorage:", error)
-      );
-
-      return newFavorites;
+      // Salva os favoritos no localStorage
+      try {
+        AsyncStorage.setItem("favorites", JSON.stringify(newFavorites));
+        return newFavorites;
+      } catch (error) {
+        console.error("Erro ao salvar favoritos:", error);
+      }
     });
   };
 

@@ -4,24 +4,24 @@ import { Ionicons } from "react-native-vector-icons";
 import StarRating from "../StarRating/StarRating";
 import { config } from "../../config";
 import { useNavigation } from "@react-navigation/native";
+import { useAppContext } from "../../Context";
 
 // Constants
 const posterImage = `${config.IMG}`;
 
-export default function MovieCard({ movie, handleClick }) {
+export default function MovieCard({ movie }) {
   const navigation = useNavigation();
-  const [isFavorited, setIsFavorited] = useState(false);
+  const { listFavorites, handleFavoriteList } = useAppContext();
 
-  const handleFavorite = () => {
-    setIsFavorited(!isFavorited);
-    handleClick(movie.id);
+  const handleFavoriteListInternal = () => {
+    handleFavoriteList(movie);
   };
 
   const isFavorited = movie.id in listFavorites;
-
   return (
     <View style={styles.cardContainer}>
       {/* Imagem do pôster */}
+
       <Image
         source={{ uri: `${posterImage}/${movie.poster_path}` }}
         style={styles.moviePosterImg}
@@ -29,13 +29,15 @@ export default function MovieCard({ movie, handleClick }) {
 
       {/* Informações do filme */}
       <View style={styles.movieInfo}>
-        <Text style={styles.movieTitle}>
-          {movie.title}
-          <StarRating rating={movie.vote_average} />
-        </Text>
+        <View>
+          <Text style={styles.movieTitle}>
+            {movie.title}
+            <StarRating rating={movie.vote_average} style={styles.rating} />
+          </Text>
+        </View>
 
         {/* Botão de Favoritar */}
-        <TouchableOpacity onPress={handleFavorite}>
+        <TouchableOpacity onPress={handleFavoriteListInternal}>
           <Ionicons
             name={isFavorited ? "heart" : "heart-outline"}
             size={24}
@@ -46,9 +48,12 @@ export default function MovieCard({ movie, handleClick }) {
         {/* Descrição do filme */}
         {movie.overview && (
           <Text style={styles.movieDescription}>
-            {movie.overview.length > 150
-              ? `${movie.overview.substring(0, 150)}...`
-              : movie.overview}
+            {/* Verifique se `movie.overview` existe */}
+            {movie.overview
+              ? movie.overview.length > 150
+                ? `${movie.overview.substring(0, 150)}...`
+                : movie.overview
+              : "Descrição indisponível."}
           </Text>
         )}
 
@@ -90,7 +95,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
   },
   movieTitle: {
-    padding: 10,
+    paddingVertical: 10,
     fontSize: 18,
     fontWeight: "bold",
     color: "white",
@@ -118,5 +123,8 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 18,
     fontWeight: "bold",
+  },
+  rating: {
+    paddingRight: 10,
   },
 });
